@@ -1,10 +1,10 @@
 const express  = require('express');
+const router = express.Router();
 const passport = require('passport');
 const bcrypt   = require('bcrypt');
 const User     = require('../../models/user');
 const response = require('../../helpers/response');
 const salt     = bcrypt.genSaltSync(10);
-const hashPass = bcrypt.hashSync(password, salt);
 
 router.post('/signup', (req, res, next) => {
   const username = req.body.username;
@@ -20,10 +20,10 @@ router.post('/signup', (req, res, next) => {
       response.nonUniqueUsername(req, res, err);
       return;
     }
-
+  
     const theUser = new User({
       username,
-      password: hashPass
+      password: bcrypt.hashSync(password, salt)
     });
 
     theUser.save((err) => {
@@ -87,3 +87,5 @@ router.get('/private', (req, res, next) => {
   }
   response.unauthorised(req, res, err);
 });
+
+module.exports = router;

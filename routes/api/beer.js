@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var Beer = require('../../models/beer');
-var response = require('../../helpers/response');
+const express = require('express');
+const router = express.Router();
+const Beer = require('../../models/beer');
+const response = require('../../helpers/response');
 
 //GET ALL BEERS
 router.get('/', function(req, res, next) {
