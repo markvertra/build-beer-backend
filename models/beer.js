@@ -12,7 +12,7 @@ const BeerSchema = new Schema({
     type: String
   },
   beerDetails: {
-    style: { type: String, enum: listOfBeerTypes },
+    style: { type: String },
     extraColourants: { type: Array },
     extraFlavours: { type: Array },
     timeToAge: {type: Number }

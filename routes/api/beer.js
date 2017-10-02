@@ -39,16 +39,11 @@ router.get('/:id', function(req, res, next) {
 
 // ADD NEW BEER 
 router.post('/', function(req, res, next) {
- 
+
   const newBeer = new Beer({
     name: req.body.name,
     description: req.body.description,
-    beerDetails: {
-      style: req.body.style,
-      extraColorants: req.body.colorants,
-      extraFlavors: req.body.flavors,
-      timeToAge: req.body.aging
-    },
+    beerDetails: req.body.beerDetails,
     creatorId: req.body.creatorId,
     label: {
       imageURL: req.body.imageURL,
