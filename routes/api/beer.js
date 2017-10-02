@@ -3,7 +3,7 @@ var router = express.Router();
 var Beer = require('../models/beer');
 var response = require('../../helpers/response');
 
-//Todo List
+//GET ALL BEERS
 router.get('/', function(req, res, next) {
 
   Beer.find({}, (err, data) => {
@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// GET ONE BEER
 router.get('/:id', function(req, res, next) {
   if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
     response.notFound(res);
@@ -35,5 +36,74 @@ router.get('/:id', function(req, res, next) {
     res.json(data);
   });
 });
+
+// ADD NEW BEER 
+router.post('/', function(req, res, next) {
+  const newBeer = new Beer({
+    name: req.body.name,
+    description: req.body.description,
+    beerDetails: {
+      style: req.body.style,
+      extraColorants: req.body.colorants,
+      extraFlavors: req.body.flavors,
+      timeToAge: req.body.aging
+    },
+    creatorId: req.body.creatorId,
+    label: {
+      imageURL: req.body.imageURL,
+    },
+    cap: req.body.cap
+  });
+  
+  newBeer.save( (err) => {
+    if (err) { 
+      response.unexpectedError(req, res, err);
+      return;
+    }
+
+    return res.status(200).json(newBeer);
+  });
+});
+
+// UPDATE ONE BEER
+router.post('/:id', function(req, res, next) {
+  const updatedBeer = new Beer({
+    name: req.body.name,
+    description: req.body.description,
+    beerDetails: {
+      style: req.body.style,
+      extraColorants: req.body.colorants,
+      extraFlavors: req.body.flavors,
+      timeToAge: req.body.aging
+    },
+    creatorId: req.body.creatorId,
+    label: {
+      imageURL: req.body.imageURL,
+    },
+    cap: req.body.cap
+  });
+
+  Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
+    if (err) { 
+      response.unexpectedError(req, res, err);
+      return;
+    }
+    
+    return res.status(200).json(updatedBeer);
+  });
+});
+
+// DELETE ONE BEER
+router.post('/delete/:id', function(req, res, next) {
+  Beer.findByIdAndRemove(req.params.id, (err, beer) => {
+    if (err) {
+      response.unexpectedError(req, res, err);
+      return;
+      }
+
+    return res.status(200).json(beer);
+  });
+});
+
 
 module.exports = router;
