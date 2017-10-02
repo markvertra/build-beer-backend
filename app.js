@@ -6,7 +6,10 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const session    = require('express-session');
+const passport   = require('passport');
 
+const passportSetup = require('./helpers/passport');
 const index = require('./routes/index');
 const response = require('./helpers/response');
 
@@ -27,6 +30,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+
+// passport for authentication
+passportSetup(passport);
+app.use(session({
+  secret: 'beerbuilder passport secret shh',
+  resave: true,
+  saveUninitialized: true,
+  cookie : { httpOnly: true, maxAge: 2419200000 }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routes managed in index
 app.use('/', index);
 
 // catch 404 and forward to error handler
