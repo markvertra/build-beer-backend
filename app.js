@@ -8,6 +8,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const index = require('./routes/index');
+const response = require('./helpers/response');
 
 const app = express();
 
@@ -46,8 +47,9 @@ app.use(function(err, req, res, next) {
   console.log(req.path, req.method, err);
   // render the error page
   if (!res.headersSent) {
-    res.status(err.status || 500);
-    res.render('error');
+
+    response.unexpectedError(req, res, err);
+    
   }
 });
 

@@ -3,7 +3,7 @@ const Schema   = mongoose.Schema;
 
 const listOfCapColours = ['blue', 'red', 'silver', 'gold'];
 const listOfBeerTypes = ['IPA', 'Porter', 'Stout', 'Lager', 'Pale Ale',
-                         'Saison', 'Hefe-weissen', 'Red Ale']
+                         'Saison', 'Hefe-weissen', 'Red Ale'];
 
 const BeerSchema = new Schema({
   name: {
