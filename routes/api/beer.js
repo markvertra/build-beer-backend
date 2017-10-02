@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Beer = require('../models/beer');
+var Beer = require('../../models/beer');
 var response = require('../../helpers/response');
 
 //GET ALL BEERS

@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var Order = require('../models/order');
+var Order = require('../../models/order');
 var response = require('../../helpers/response');
 
 //GET ALL ORDERS

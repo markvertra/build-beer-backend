@@ -16,12 +16,9 @@ const OrderSchema = new Schema({
     telephoneNumber: { type: String },
     email: { type: String }
   },
-  orderCreatedTime: {
-    timestamps: { createdAt: 'created_at' } 
-  },
   isShipped: {
     type: Boolean,
-  }
-});
+  }}, 
+  { timestamps: true });
 
 module.exports = mongoose.model('Order', OrderSchema);
