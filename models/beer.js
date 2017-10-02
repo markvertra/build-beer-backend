@@ -4,6 +4,8 @@ const Schema   = mongoose.Schema;
 const listOfCapColours = ['blue', 'red', 'silver', 'gold'];
 const listOfBeerTypes = ['IPA', 'Porter', 'Stout', 'Lager', 'Pale Ale',
                          'Saison', 'Hefe-weissen', 'Red Ale'];
+const listOfBeerPrices = { IPA: 2.50, Porter: 2.50, Stout: 2.50, Lager: 2.50,
+                          Pale: 2.50, Hefeweissen: 2.50, Red: 2.50 };
 
 const BeerSchema = new Schema({
   name: {
@@ -11,8 +13,8 @@ const BeerSchema = new Schema({
   },
   beerDetails: {
     style: { enum: listOfBeerTypes },
-    extraColorants: { type: String },
-    extraFlavors: { type: String},
+    extraColorants: { type: Array },
+    extraFlavors: { type: Array },
     timeToAge: {type: Number }
   },
   creatorId: {
@@ -23,7 +25,10 @@ const BeerSchema = new Schema({
     imageURL: { type: String }
   },
   cap: {
-    type: { enum: listOfCapColours }
+    color: { enum: listOfCapColours }
+  },
+  isDraft: {
+    type: Boolean
   }
 });
 

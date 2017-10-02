@@ -39,6 +39,7 @@ router.get('/:id', function(req, res, next) {
 
 // ADD NEW BEER 
 router.post('/', function(req, res, next) {
+ 
   const newBeer = new Beer({
     name: req.body.name,
     description: req.body.description,
@@ -52,7 +53,10 @@ router.post('/', function(req, res, next) {
     label: {
       imageURL: req.body.imageURL,
     },
-    cap: req.body.cap
+    cap: {
+      color: req.body.capColor
+    },
+    isDraft: req.body.isDraft
   });
   
   newBeer.save( (err) => {
@@ -80,7 +84,10 @@ router.post('/:id', function(req, res, next) {
     label: {
       imageURL: req.body.imageURL,
     },
-    cap: req.body.cap
+    cap: {
+      color: req.body.capColor
+    },
+    isDraft: req.body.isDraft
   });
 
   Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
