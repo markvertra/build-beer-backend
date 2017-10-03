@@ -13,7 +13,7 @@ const BeerSchema = new Schema({
   },
   beerDetails: {
     style: { type: String },
-    extraColourants: { type: Array },
+    opacity: { type: String },
     extraFlavours: { type: Array },
     timeToAge: {type: Number }
   },
@@ -22,10 +22,10 @@ const BeerSchema = new Schema({
     ref: 'User'
   },
   label: {
-    imageURL: { type: String }
+    color: { type: String }
   },
   cap: {
-    color: { enum: listOfCapColours }
+    color: { type: String }
   },
   isDraft: {
     type: Boolean

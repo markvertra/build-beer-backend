@@ -71,7 +71,7 @@ router.post('/logout', (req, res) => {
   return response.ok(req, res);
 });
 
-router.get('/me', (req, res) => {
+router.get('/loggedin', (req, res) => {
   if (req.isAuthenticated()) {
     let user = req.user;
     return response.data(req, res, user.asData());

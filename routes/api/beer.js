@@ -42,11 +42,10 @@ router.post('/', function(req, res, next) {
 
   const newBeer = new Beer({
     name: req.body.name,
-    description: req.body.description,
     beerDetails: req.body.beerDetails,
     creatorId: req.body.creatorId,
     label: {
-      imageURL: req.body.imageURL,
+      color: req.body.labelColor,
     },
     cap: {
       color: req.body.capColor
@@ -59,7 +58,6 @@ router.post('/', function(req, res, next) {
       response.unexpectedError(req, res, err);
       return;
     }
-
     return res.status(200).json(newBeer);
   });
 });
@@ -68,16 +66,15 @@ router.post('/', function(req, res, next) {
 router.post('/:id', function(req, res, next) {
   const updatedBeer = new Beer({
     name: req.body.name,
-    description: req.body.description,
     beerDetails: {
       style: req.body.style,
-      extraColorants: req.body.colorants,
+      opacity: req.body.opacity,
       extraFlavors: req.body.flavors,
       timeToAge: req.body.aging
     },
     creatorId: req.body.creatorId,
     label: {
-      imageURL: req.body.imageURL,
+      color: req.body.labelColor,
     },
     cap: {
       color: req.body.capColor
