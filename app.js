@@ -8,6 +8,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const session    = require('express-session');
 const passport   = require('passport');
+const MongoStore = require('connect-mongo')(session);
 
 const passportSetup = require('./helpers/passport');
 const index = require('./routes/index');
@@ -28,16 +29,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
 
-
-// passport for authentication
+// passport + cors for authentication
 passportSetup(passport);
 app.use(session({
-  secret: 'beerbuilder passport secret shh',
+  secret: 'beerbuilder-app',
   resave: true,
   saveUninitialized: true,
-  cookie : { httpOnly: true, maxAge: 2419200000 }
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection
+  })
+}));
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:4200']
 }));
 app.use(passport.initialize());
 app.use(passport.session());

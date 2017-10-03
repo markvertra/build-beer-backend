@@ -2,7 +2,7 @@ const express  = require('express');
 const router = express.Router();
 const passport = require('passport');
 const bcrypt   = require('bcrypt');
-const User     = require('../../models/user');
+const User     = require('../../models/user').User;
 const response = require('../../helpers/response');
 const salt     = bcrypt.genSaltSync(10);
 
@@ -10,82 +10,75 @@ router.post('/signup', (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (!username || !password) {
-    response.emptyFields(req, res, err);
-    return;
+  if (!username) {
+    return response.unprocessable(req, res, 'Missing mandatory field "Username".');
+  }
+  if (!password) {
+    return response.unprocessable(req, res, 'Missing mandatory field "Password".');
   }
 
-  User.findOne({ username }, '_id', (err, foundUser) => {
-    if (foundUser) {
-      response.nonUniqueUsername(req, res, err);
-      return;
+  User.findOne({
+    username
+  }, 'username', (err, userExists) => {
+    if (err) {
+      return next(err);
     }
-  
-    const theUser = new User({
+    if (userExists) {
+      return response.unprocessable(req, res, 'Username already in use.');
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashPass = bcrypt.hashSync(password, salt);
+
+    const newUser = User({
       username,
-      password: bcrypt.hashSync(password, salt)
+      password: hashPass
     });
 
-    theUser.save((err) => {
+    newUser.save((err) => {
       if (err) {
-        response.saveError(req, res, err);
-        return;
+        return next(err);
       }
-
-      req.login(theUser, (err) => {
+      req.login(newUser, (err) => {
         if (err) {
-          response.unexpectedError(req, res, err);
-          return;
+          return next(err);
         }
-
-        res.status(200).json(req.user);
+        return response.data(req, res, newUser.asData());
       });
     });
   });
 });
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, theUser, failureDetails) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) {
-      response.unexpectedError(req, res, err);
-      return;
+      return next(err);
     }
-
-    if (!theUser) {
-      res.status(401).json(failureDetails);
-      return;
+    if (!user) {
+      return response.notFound(req, res);
     }
-
-    req.login(theUser, (err) => {
+    req.login(user, (err) => {
       if (err) {
-        response.unexpectedError(req, res, err);
-        return;
+        return next(err);
       }
-
-      res.status(200).json(req.user);
+      return response.data(req, res, req.user);
     });
   })(req, res, next);
 });
 
-router.post('/logout', (req, res, next) => {
+router.post('/logout', (req, res) => {
   req.logout();
-  res.status(200).json({ message: 'Success' });
+  return response.ok(req, res);
 });
 
-router.get('/loggedin', (req, res, next) => {
+router.get('/me', (req, res) => {
   if (req.isAuthenticated()) {
-    res.status(200).json(req.user);
-    return;
+    let user = req.user;
+    return response.data(req, res, user.asData());
   }
-  response.unauthorised(req, res, err);
+
+  return response.notFound(req, res);
 });
 
-router.get('/private', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    res.json({ message: 'This is a private message' });
-    return;
-  }
-  response.unauthorised(req, res, err);
-});
 
 module.exports = router;

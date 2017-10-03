@@ -1,5 +1,13 @@
 module.exports = {
 
+  data: function(req, res, data) {
+    res.status(200).json(data);
+  },
+
+  ok: function(req, res) {
+    res.status(200).json({});
+  },
+
   notFound: function(res) {
     res.status(404).json({error: 'Not found!'});
   },
@@ -10,11 +18,11 @@ module.exports = {
     res.status(500).json({error: 'Unexpected error!'});
   },
 
-  emptyFields: function(req, res, err) {
+  emptyFields: function(res) {
     res.status(400).json({error: 'Please complete all fields'});
   },
 
-  nonUniqueUsername: function(req, res, err) {
+  nonUniqueUsername: function(res) {
     res.status(400).json({error: 'That username already exists'});
   },
 
@@ -24,8 +32,15 @@ module.exports = {
     res.status(400).json({error: '400: Unexpected Error'});
   },
 
-  unauthorised: function(req, res, err) {
+  unauthorised: function(res) {
     res.status(403).json({error: '403: Unauthorised'});
+  },
+
+
+  unprocessable: function(req, res, err) {
+    res.status(422).json({
+      error: err || 'Unprocessable'
+    });
   },
 
 };
