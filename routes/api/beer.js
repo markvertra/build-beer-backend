@@ -39,13 +39,17 @@ router.get('/:id', function(req, res, next) {
 
 // ADD NEW BEER 
 router.post('/', function(req, res, next) {
-
   const newBeer = new Beer({
     name: req.body.name,
+    description: req.body.description,
     beerDetails: req.body.beerDetails,
     creatorId: req.body.creatorId,
     label: {
       color: req.body.labelColor,
+      fontColor: req.body.labelFontColor,
+      font: req.body.labelFont,
+      image: req.body.labelImage,
+      slogan: req.body.labelSlogan
     },
     cap: {
       color: req.body.capColor
@@ -75,6 +79,10 @@ router.post('/:id', function(req, res, next) {
     creatorId: req.body.creatorId,
     label: {
       color: req.body.labelColor,
+      fontColor: req.body.labelFontColor,
+      font: req.body.labelFont,
+      image: req.body.labelImage,
+      slogan: req.body.labelSlogan
     },
     cap: {
       color: req.body.capColor
