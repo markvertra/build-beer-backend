@@ -14,9 +14,11 @@ const passportSetup = require('./helpers/passport');
 const index = require('./routes/index');
 const response = require('./helpers/response');
 
+require("dotenv").config();
+
 const app = express();
 
-mongoose.connect('mongodb://localhost/app-beer-builder');
+mongoose.connect(process.env.MONGODB_URI);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
