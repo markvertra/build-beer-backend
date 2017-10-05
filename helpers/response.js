@@ -8,7 +8,7 @@ module.exports = {
     res.status(200).json({});
   },
 
-  notFound: function(res) {
+  notFound: function(req, res) {
     res.status(404).json({error: 'Not found!'});
   },
 
@@ -18,7 +18,7 @@ module.exports = {
     res.status(500).json({error: 'Unexpected error!'});
   },
 
-  emptyFields: function(res) {
+  emptyFields: function(req, res) {
     res.status(400).json({error: 'Please complete all fields'});
   },
 
