@@ -15,6 +15,18 @@ router.get('/', function(req, res, next) {
   });
 });
 
+//GET ALL PUBLIC BEERS
+router.get('/public', function(req, res, next) {
+  
+    Beer.find({isPublic: true}, (err, data) => {
+      if(err){
+        response.unexpectedError(res);
+        return;
+      }
+      res.json(data);
+    });
+  });
+
 // GET ONE BEER
 router.get('/:id', function(req, res, next) {
   if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -22,6 +34,25 @@ router.get('/:id', function(req, res, next) {
     return;
   }
   Beer.findById(req.params.id, (err, data) => {
+
+    if(err){
+      response.unexpectedError(req, res, err);
+      return;
+    }
+
+    if(!data){
+      response.notFound(res);
+      return;
+    }
+
+    res.json(data);
+  });
+});
+
+// GET ONE BEER BY USER
+router.get('/byuser/:id', function(req, res, next) {
+
+  Beer.find({creatorId: req.params.id}, (err, data) => {
 
     if(err){
       response.unexpectedError(req, res, err);
@@ -54,7 +85,7 @@ router.post('/', function(req, res, next) {
     cap: {
       color: req.body.capColor
     },
-    isDraft: req.body.isDraft
+    isPublic: req.body.isPublic
   });
   
   newBeer.save( (err) => {
@@ -89,6 +120,21 @@ router.post('/:id', function(req, res, next) {
     },
     isDraft: req.body.isDraft
   });
+
+  Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
+    if (err) { 
+      response.unexpectedError(req, res, err);
+      return;
+    }
+    
+    return res.status(200).json(updatedBeer);
+  });
+});
+
+//ADD A REVIEW
+router.post('/addreview/:id', function(req, res, next) {
+  const id = req.user.id;
+  const review = { id : req.body.review };
 
   Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
     if (err) { 

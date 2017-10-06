@@ -30,8 +30,12 @@ const BeerSchema = new Schema({
   cap: {
     color: { type: String }
   },
-  isDraft: {
-    type: Boolean
+  isPublic: {
+    default: false,
+    type: Boolean,
+  },
+  reviews: {
+    type: Array
   }
 });
 
