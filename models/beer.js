@@ -24,6 +24,7 @@ const BeerSchema = new Schema({
     fontColor: { type: String },
     font: { type: String },
     image: { type: String },
+    imageLink: { type: String},
     slogan: { type: String }
 
   },

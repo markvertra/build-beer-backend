@@ -27,6 +27,18 @@ router.get('/public', function(req, res, next) {
     });
   });
 
+//GET ALL PRIVATE BEERS
+router.get('/private', function(req, res, next) {
+  
+    Beer.find({isPublic: false}, (err, data) => {
+      if(err){
+        response.unexpectedError(res);
+        return;
+      }
+      res.json(data);
+    });
+  });
+
 // GET ONE BEER
 router.get('/:id', function(req, res, next) {
   if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
@@ -49,7 +61,7 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
-// GET ONE BEER BY USER
+// GET ALL BEERS BY USER
 router.get('/byuser/:id', function(req, res, next) {
 
   Beer.find({creatorId: req.params.id}, (err, data) => {
@@ -68,6 +80,44 @@ router.get('/byuser/:id', function(req, res, next) {
   });
 });
 
+// GET ALL PUBLIC BEERS BY USER
+router.get('/byuser/:id/public', function(req, res, next) {
+  
+    Beer.find({creatorId: req.params.id, isPublic: true}, (err, data) => {
+  
+      if(err){
+        response.unexpectedError(req, res, err);
+        return;
+      }
+  
+      if(!data){
+        response.notFound(res);
+        return;
+      }
+  
+      res.json(data);
+    });
+  });
+
+// GET ALL PRIVATE BEERS BY USER
+router.get('/byuser/:id/private', function(req, res, next) {
+  
+    Beer.find({creatorId: req.params.id, isPublic: false}, (err, data) => {
+  
+      if(err){
+        response.unexpectedError(req, res, err);
+        return;
+      }
+  
+      if(!data){
+        response.notFound(res);
+        return;
+      }
+  
+      res.json(data);
+    });
+  });
+
 // ADD NEW BEER 
 router.post('/', function(req, res, next) {
   const newBeer = new Beer({
@@ -80,6 +130,7 @@ router.post('/', function(req, res, next) {
       fontColor: req.body.labelFontColor,
       font: req.body.labelFont,
       image: req.body.labelImage,
+      imageLink: req.body.labelImageLink,
       slogan: req.body.labelSlogan
     },
     cap: {
@@ -99,13 +150,13 @@ router.post('/', function(req, res, next) {
 
 // UPDATE ONE BEER
 router.post('/:id', function(req, res, next) {
-  const updatedBeer = new Beer({
+  const updatedBeer = {
     name: req.body.name,
     beerDetails: {
       style: req.body.style,
+      color: req.body.color,
       opacity: req.body.opacity,
-      extraFlavors: req.body.flavors,
-      timeToAge: req.body.aging
+      extraFlavors: [req.body.flavors],
     },
     creatorId: req.body.creatorId,
     label: {
@@ -118,15 +169,15 @@ router.post('/:id', function(req, res, next) {
     cap: {
       color: req.body.capColor
     },
-    isDraft: req.body.isDraft
-  });
+    isPublic: req.body.isPublic
+  };
 
   Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
     if (err) { 
       response.unexpectedError(req, res, err);
       return;
     }
-    
+    console.log(updatedBeer)
     return res.status(200).json(updatedBeer);
   });
 });
