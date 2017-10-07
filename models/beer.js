@@ -40,7 +40,8 @@ const BeerSchema = new Schema({
     type: Boolean,
   },
   reviews: {
-    type: Object
+    type: Object,
+    default: {}
   }
 });
 

@@ -186,17 +186,23 @@ router.post('/:id', function(req, res, next) {
 });
 
 //ADD A REVIEW
-router.post('/addreview/:id', function(req, res, next) {
-  const id = req.user.id;
-  const review = { id : req.body.review };
+router.post('/review/:id', function(req, res, next) {
+  const id = req.params.id;
+  const user = req.body.user;
+  const score = req.body.score;
+  let reviews = { };
+  reviews[user] = score;
+  const updatedBeer = {
+    reviews: reviews
+  }
 
-  Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
+  Beer.findByIdAndUpdate(id, updatedBeer, (err, beer) => {
     if (err) { 
       response.unexpectedError(req, res, err);
       return;
     }
     
-    return res.status(200).json(updatedBeer);
+    return res.status(200).json(beer);
   });
 });
 
