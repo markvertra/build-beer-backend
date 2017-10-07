@@ -20,12 +20,10 @@ const UserSchema = new Schema({
     email: { type: String }
   },
   beersBuilt: {
-    type: Schema.Types.ObjectId,
-    ref: 'Beer'
+    type: Array,
   },
   ordersMade: {
-    type: Schema.Types.ObjectId,
-    ref: 'Order'
+    type: Array,
   }
 });
 

@@ -123,6 +123,7 @@ router.post('/', function(req, res, next) {
   const newBeer = new Beer({
     name: req.body.name,
     description: req.body.description,
+    searchable: req.body.name + " " + req.body.style + " " + req.body.flavors + " " + req.body.labelSlogan,
     beerDetails: req.body.beerDetails,
     creatorId: req.body.creatorId,
     label: {
@@ -152,12 +153,14 @@ router.post('/', function(req, res, next) {
 router.post('/:id', function(req, res, next) {
   const updatedBeer = {
     name: req.body.name,
+    description: req.body.description,
     beerDetails: {
       style: req.body.style,
       color: req.body.color,
       opacity: req.body.opacity,
       extraFlavors: [req.body.flavors],
     },
+    searchable: req.body.name + " " + req.body.style + " " + req.body.flavors + " " + req.body.labelSlogan,
     creatorId: req.body.creatorId,
     label: {
       color: req.body.labelColor,

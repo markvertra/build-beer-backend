@@ -19,6 +19,10 @@ const BeerSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
+  searchable: {
+    type: String,
+    default: ''
+  },
   label: {
     color: { type: String },
     fontColor: { type: String },
