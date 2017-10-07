@@ -12,7 +12,7 @@ const BeerSchema = new Schema({
     style: { type: String },
     color: { type: String},
     opacity: { type: String },
-    extraFlavours: { type: Array },
+    extraFlavours: { type: Array, default: 'None' },
     timeToAge: {type: Number }
   },
   creatorId: {
@@ -40,7 +40,7 @@ const BeerSchema = new Schema({
     type: Boolean,
   },
   reviews: {
-    type: Array
+    type: Object
   }
 });
 

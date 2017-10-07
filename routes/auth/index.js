@@ -11,11 +11,9 @@ router.post('/signup', (req, res, next) => {
   const password = req.body.password;
 
   if (!username) {
-    console.log("no username")
     return response.unprocessable(req, res, 'Missing mandatory field "Username".');
   }
   if (!password) {
-    console.log("no password")
     return response.unprocessable(req, res, 'Missing mandatory field "Password".');
   }
 
@@ -26,7 +24,6 @@ router.post('/signup', (req, res, next) => {
       return next(err);
     }
     if (userExists) {
-      console.log("user exists")
       return response.unprocessable(req, res, 'Username already in use.');
     }
 
@@ -44,10 +41,8 @@ router.post('/signup', (req, res, next) => {
       }
       req.login(newUser, (err) => {
         if (err) {
-          console.log("not logged in")
           return next(err);
         }
-        console.log(newUser + "signed up +");
         return response.data(req, res, newUser.asData());
       });
     });

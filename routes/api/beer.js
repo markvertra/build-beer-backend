@@ -158,7 +158,7 @@ router.post('/:id', function(req, res, next) {
       style: req.body.style,
       color: req.body.color,
       opacity: req.body.opacity,
-      extraFlavors: [req.body.flavors],
+      extraFlavours: [req.body.flavors],
     },
     searchable: req.body.name + " " + req.body.style + " " + req.body.flavors + " " + req.body.labelSlogan,
     creatorId: req.body.creatorId,
@@ -172,7 +172,8 @@ router.post('/:id', function(req, res, next) {
     cap: {
       color: req.body.capColor
     },
-    isPublic: req.body.isPublic
+    isPublic: req.body.isPublic,
+    reviews: {}
   };
 
   Beer.findByIdAndUpdate(req.params.id, updatedBeer, (err, beer) => {
@@ -180,7 +181,6 @@ router.post('/:id', function(req, res, next) {
       response.unexpectedError(req, res, err);
       return;
     }
-    console.log(updatedBeer)
     return res.status(200).json(updatedBeer);
   });
 });
