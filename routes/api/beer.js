@@ -123,7 +123,7 @@ router.post('/', function(req, res, next) {
   const newBeer = new Beer({
     name: req.body.name,
     description: req.body.description,
-    searchable: req.body.name + " " + req.body.style + " " + req.body.flavors + " " + req.body.labelSlogan,
+    searchable: req.body.name + " " + req.body.beerDetails.style + " " + req.body.beerDetails.extraFlavours + " " + req.body.labelSlogan,
     beerDetails: req.body.beerDetails,
     creatorId: req.body.creatorId,
     label: {
