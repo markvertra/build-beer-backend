@@ -18,7 +18,11 @@ const OrderSchema = new Schema({
   },
   isShipped: {
     type: Boolean,
-  }}, 
+  }, 
+  isOrderComplete: {
+    type: Boolean,
+    default: false
+  }},
   { timestamps: true });
 
 module.exports = mongoose.model('Order', OrderSchema);

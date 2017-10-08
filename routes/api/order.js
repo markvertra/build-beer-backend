@@ -62,7 +62,8 @@ router.post('/:id', function(req, res, next) {
     userOrdering: req.body.userOrdering,
     beersOrdered: req.body.beersOrdered,
     deliverydetails: req.body.deliveryDetails,
-    isShipped: req.body.isShipped
+    isShipped: req.body.isShipped,
+    isOrderComplete: req.body.orderComplete 
   });
 
   Order.findByIdAndUpdate(req.params.id, updatedOrder, (err, order) => {

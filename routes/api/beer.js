@@ -137,7 +137,8 @@ router.post('/', function(req, res, next) {
     cap: {
       color: req.body.capColor
     },
-    isPublic: req.body.isPublic
+    isPublic: req.body.isPublic,
+    reviews: {}
   });
   
   newBeer.save( (err) => {
@@ -188,13 +189,9 @@ router.post('/:id', function(req, res, next) {
 //ADD A REVIEW
 router.post('/review/:id', function(req, res, next) {
   const id = req.params.id;
-  const user = req.body.user;
-  const score = req.body.score;
-  let reviews = { };
-  reviews[user] = score;
   const updatedBeer = {
-    reviews: reviews
-  }
+    reviews: req.body
+  };
 
   Beer.findByIdAndUpdate(id, updatedBeer, (err, beer) => {
     if (err) { 
