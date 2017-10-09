@@ -103,4 +103,21 @@ router.get('/userInfo/:id', (req, res) => {
   });
 });
 
+router.get('/userInfo', (req, res) => {
+  User.find((err, data) => {
+
+    if(err){
+      response.unexpectedError(req, res, err);
+      return;
+    }
+
+    if(!data){
+      response.notFound(res);
+      return;
+    }
+
+    res.json(data);
+  });
+});
+
 module.exports = router;

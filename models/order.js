@@ -18,6 +18,7 @@ const OrderSchema = new Schema({
   },
   isShipped: {
     type: Boolean,
+    default: false,
   }, 
   isOrderComplete: {
     type: Boolean,

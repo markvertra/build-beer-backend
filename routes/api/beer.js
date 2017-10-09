@@ -188,6 +188,7 @@ router.post('/:id', function(req, res, next) {
 
 //ADD A REVIEW
 router.post('/review/:id', function(req, res, next) {
+  console.log(req.body)
   const id = req.params.id;
   const updatedBeer = {
     reviews: req.body

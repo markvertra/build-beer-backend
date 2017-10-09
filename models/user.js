@@ -19,12 +19,9 @@ const UserSchema = new Schema({
     telephoneNumber: { type: String },
     email: { type: String }
   },
-  beersBuilt: {
+  beersOrdered: {
     type: Array,
   },
-  ordersMade: {
-    type: Array,
-  }
 });
 
 UserSchema.methods.generateHash = function(password) {

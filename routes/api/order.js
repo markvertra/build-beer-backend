@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Order = require('../../models/order');
 var response = require('../../helpers/response');
+const User = require('../../models/user').User;
 
 //GET ALL ORDERS
 router.get('/', function(req, res, next) {
@@ -37,12 +38,31 @@ router.get('/:id', function(req, res, next) {
   });
 });
 
+// GET ORDER BY USER
+router.get('/user/:id', function(req, res, next) {
+  Order.find({userOrdering: req.params.id}, (err, data) => {
+
+    if(err){
+      response.unexpectedError(req, res, err);
+      return;
+    }
+
+    if(!data){
+      response.notFound(res);
+      return;
+    }
+
+    res.json(data);
+  });
+});
+
 // ADD NEW ORDER
-router.post('/', function(req, res, next) {
+router.post('/userorder/:id', function(req, res, next) {
+
   const newOrder = new Order({
     userOrdering: req.body.userOrdering,
     beersOrdered: req.body.beersOrdered,
-    deliverydetails: req.body.deliveryDetails,
+    deliveryDetails: req.body.deliveryDetails,
     isShipped: req.body.isShipped
   });
   
@@ -52,17 +72,18 @@ router.post('/', function(req, res, next) {
       return;
     }
 
+    User.findByIdAndUpdate(req.params.id, {
+      $push: {beersOrdered: newOrder.beersOrdered} }, (err, user) => {
+      if (err) {return next(err);}
+
     return res.status(200).json(newOrder);
+    });
   });
 });
 
 // UPDATE ONE Order
 router.post('/:id', function(req, res, next) {
   const updatedOrder = new Order({
-    userOrdering: req.body.userOrdering,
-    beersOrdered: req.body.beersOrdered,
-    deliverydetails: req.body.deliveryDetails,
-    isShipped: req.body.isShipped,
     isOrderComplete: req.body.orderComplete 
   });
 
