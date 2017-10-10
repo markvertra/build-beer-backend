@@ -41,10 +41,6 @@ router.get('/private', function(req, res, next) {
 
 // GET ONE BEER
 router.get('/:id', function(req, res, next) {
-  if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
-    response.notFound(res);
-    return;
-  }
   Beer.findById(req.params.id, (err, data) => {
 
     if(err){
@@ -56,7 +52,6 @@ router.get('/:id', function(req, res, next) {
       response.notFound(res);
       return;
     }
-
     res.json(data);
   });
 });
@@ -76,6 +71,36 @@ router.get('/byuser/:id', function(req, res, next) {
       return;
     }
 
+    res.json(data);
+  });
+});
+
+// GET BEERS BY GROUP
+router.get('/array', function(req, res, next) {
+    Beer.find({id: { $in: req.body.array }}, (err, data) => {
+  
+      if(err){
+        response.unexpectedError(req, res, err);
+        return;
+      }
+  
+      if(!data){
+        response.notFound(res);
+        return;
+      }
+  
+      res.json(data);
+    });
+  });
+
+//GET BEERS BY STYLE
+router.get('/style/:style', function(req, res, next) {
+ 
+  Beer.find({'beerDetails.style' : req.params.style, isPublic: true}, (err, data) => {
+    if(err){
+      response.unexpectedError(res);
+      return;
+    }
     res.json(data);
   });
 });
@@ -188,7 +213,7 @@ router.post('/:id', function(req, res, next) {
 
 //ADD A REVIEW
 router.post('/review/:id', function(req, res, next) {
-  console.log(req.body)
+
   const id = req.params.id;
   const updatedBeer = {
     reviews: req.body

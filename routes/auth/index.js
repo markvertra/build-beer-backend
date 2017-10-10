@@ -74,11 +74,9 @@ router.post('/logout', (req, res) => {
 
 router.get('/loggedin', (req, res) => {
   if (req.isAuthenticated()) {
-    console.log(req.user + "Logged In");
     let user = req.user;
     return response.data(req, res, user.asData());
   }
-  console.log("not logged in");
   return response.notFound(req, res);
 });
 

@@ -73,7 +73,7 @@ router.post('/userorder/:id', function(req, res, next) {
     }
 
     User.findByIdAndUpdate(req.params.id, {
-      $push: {beersOrdered: newOrder.beersOrdered} }, (err, user) => {
+      $push: {beersOrdered: newOrder.beersOrdered}, }, (err, user) => {
       if (err) {return next(err);}
 
     return res.status(200).json(newOrder);
