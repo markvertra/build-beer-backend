@@ -44,7 +44,7 @@ app.use(session({
 }));
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:4200']
+  origin: [process.env.FRONTEND_URL]
 }));
 app.use(passport.initialize());
 app.use(passport.session());
